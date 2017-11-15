@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Button, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
-import { FormEvent } from 'react';
+import { Button, FormControl, ControlLabel } from 'react-bootstrap';
+import './Login.css';
 
 interface Props {
     email: string;
@@ -26,53 +26,57 @@ class Login extends React.Component<Props, State> {
         // TODO write code to validate farm
     }
 
-    handleEmailChange(event): void {
+    handleEmailChange(event: React.FormEvent<HTMLFormElement>): void {
         this.setState({
-            email: event.target.value,
+            email: event.currentTarget.value,
         });
     }
 
-    handlePasswordChange(event): void {
+    handlePasswordChange(event: React.FormEvent<HTMLFormElement>): void {
         this.setState({
-            password: event.target.value,
+            password: event.currentTarget.value,
         });     
     }
 
-    handleSubmit(event): void {
+    handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
         // TODO.  Handle submission of data
         event.preventDefault();
     }
 
     render() {
         return(
-            <div className="login">
-                <form onSubmit={this.handleSubmit}>
-                    <FormGroup controlId="email" bsSize="large">
-                        <ControlLabel>Email</ControlLabel>
-                        <FormControl
-                            autoFocus={true}
-                            type="email"
-                            value={this.state.email}
-                            onChange={this.handleEmailChange}
-                        />
-                    </FormGroup>
-                    <FormGroup controlId="password" bsSize="large">
-                        <ControlLabel>Password</ControlLabel>
-                        <FormControl
-                            value={this.state.password}
-                            onChange={this.handlePasswordChange}
-                            type="password"
-                        />
-                    </FormGroup>
-                    <Button
-                        block={true}
-                        bsSize="large"
-                        disabled={!this.validateForm()}
-                        type="submit"
-                    >
-                        Login
-                    </Button>
-                </form>
+            <div className="container login-form-group">
+                <div className="row">
+                    <div className="col-md-offset-2 col-md-8">
+                        <div className="login">
+                            <form onSubmit={this.handleSubmit}>
+                                <ControlLabel>Email Address</ControlLabel>
+                                <FormControl
+                                    id="formControlEmail"
+                                    type="text"
+                                    label="Email Address"
+                                    placeholder="Email Address"
+                                />
+                                <ControlLabel>Password</ControlLabel>
+                                <FormControl    
+                                    id="formControlPassword"
+                                    type="password"
+                                    label="Password"
+                                    placeholder="Password"
+                                />
+                    
+                                <Button 
+                                    className="btn btn-primary login-btn pull-right"
+                                    block={true} 
+                                    bsSize="large"
+                                    type="submit"
+                                >
+                                    Login
+                                </Button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }

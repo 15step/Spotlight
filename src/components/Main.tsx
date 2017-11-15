@@ -3,6 +3,8 @@ import { Switch, Route } from 'react-router-dom';
 import Home from './Home';
 import About from './About';
 import Congress from './Congress';
+import Login from '../containers/Login';
+import Signup from '../containers/Signup';
 
 const Main = () => (
   <main>
