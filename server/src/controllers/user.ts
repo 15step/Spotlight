@@ -12,12 +12,8 @@ const request = require("express-validator");
  * Login page.
  */
 export let getLogin = (req: Request, res: Response) => {
-  if (req.user) {
-    return res.redirect("/");
-  }
-  res.render("account/login", {
-    title: "Login"
-  });
+  console.log("You have reached get login!");
+  res.send("You have reached get login!");
 };
 
 /**

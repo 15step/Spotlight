@@ -22,6 +22,16 @@ class Login extends React.Component<Props, State> {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+    componentDidMount() {
+        fetch('/login').then((data) => {
+            console.log('This is the response');
+            console.log({
+                name: 'Voyager 1',
+                message: 'Hello from outside the solar system'
+            });
+        });
+    }
+
     validateForm(): void {
         // TODO write code to validate farm
     }
