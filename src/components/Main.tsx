@@ -5,12 +5,14 @@ import About from './About';
 import Congress from './Congress';
 import Login from '../containers/Login';
 import Signup from '../containers/Signup';
+import Contact from '../containers/Contact';
 
 const Main = () => (
   <main>
     <Switch>
       <Route exact={true} path="/" component={Home}/>
       <Route path="/about" component={About}/>
+      <Route path="/contact" component={Contact}/>
       <Route path="/congress" component={Congress}/>
       <Route path="/login" component={Login}/>
       <Route path="/signup" component={Signup}/>
