@@ -5,36 +5,47 @@ const bcrypt = require('bcrypt-nodejs');
 const mongoose = require('mongoose');
 const User = require("../models/User");
 const router = express.Router();
+const utils = require('../utils/spotlightUtils');
 
 
 mongoose.createConnection('mongodb://localhost/spotlight');
 
 router.post("/login", (req, res) => {
-    console.log("Hello from login");
     const username = req.body.username;
     const password = req.body.password;
 
     User.findOne({'email' : username}, (err, user) => {
         if(err) {
-            res.status(401).json({
+            return res.status(401).json({
                 success: false,
-                token: null,
-                err: "Username or password invalid"
+                message: "There was an error submitting your credentials"
             });
         }
-        let jwtToken = jwt.sign({ 
-            id: user._id,
-             username: user.email
-            },
-            'keyboard cat 4 ever',
-            {expiresIn: 129600});
+        else if(user === null) {
+            return res.status(401).json({
+                success: false,
+                message: "Username or password invalid"
+            });
+        }
+        else {
+            bcrypt.compare(req.body.password, user.password, (err, valid) => {
+                if(!valid) {
+                    res.status(401).json({
+                        error: true,
+                        message: "User"
+                    });
+                }
 
-        
-        res.status(200).json({
-            success: true,
-            err: null,
-            token: jwtToken
-        });
+                let jwtToken = utils.generateToken(user);
+
+                res.status(200).json({
+                    success: true,
+                    err: null,
+                    token: jwtToken,
+                    message: "You have been authenticated"
+                });
+            });
+        }
     });
 });
 
@@ -47,14 +58,14 @@ router.post("/signup", (req, res) => {
             res.status(401).json({
                 success: false,
                 token: null,
-                err: "Error processing signup, please try again"
+                message: "Error processing signup, please try again"
             });
         }
        else if(user) {
             res.status(401).json({
                 success: false,
                 token: null,
-                err: "A user already exists with this username"
+                message: "A user already exists with this username"
             });
         }
 
@@ -68,7 +79,7 @@ router.post("/signup", (req, res) => {
                     res.status(401).json({
                         success: false,
                         token: null,
-                        err: "There was an error saving you to the service"
+                        message: "There was an error saving you to the service"
                     });           
                 }
                 res.status(200).json({

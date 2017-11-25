@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const exjwt = require('express-jwt');
 const mongoose = require('mongoose');
+require('dotenv').config()
 
 const app = express();
 

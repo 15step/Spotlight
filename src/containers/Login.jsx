@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Button, FormControl, ControlLabel } from 'react-bootstrap';
 import './User-Forms.css';
+import * as axios from 'axios';
 
 
 class Login extends React.Component {
@@ -14,16 +15,6 @@ class Login extends React.Component {
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);        
         this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    componentDidMount() {
-        fetch('/login').then((data) => {
-            console.log('This is the response');
-            console.log({
-                name: 'Voyager 1',
-                message: 'Hello from outside the solar system'
-            });
-        });
     }
 
     validateForm() {
@@ -45,6 +36,20 @@ class Login extends React.Component {
     handleSubmit(event) {
         // TODO.  Handle submission of data
         event.preventDefault();
+
+        axios.post('/login', {
+            username: this.state.email,
+            password: this.state.password
+        }).then((response) => {
+            console.log(response);
+            if(response.status === 200) {
+                sessionStorage.setItem('jwtToken', response.data.token);                
+                console.log(response.data.message);
+            } 
+            else if(response.status === 401) {
+                console.log("User unauthorized");
+            }
+        });
     }
 
     render() {
@@ -60,6 +65,7 @@ class Login extends React.Component {
                                     type="text"
                                     label="Email Address"
                                     placeholder="Email Address"
+                                    onChange={this.handleEmailChange}
                                 />
                                 <ControlLabel>Password</ControlLabel>
                                 <FormControl    
@@ -67,6 +73,7 @@ class Login extends React.Component {
                                     type="password"
                                     label="Password"
                                     placeholder="Password"
+                                    onChange={this.handlePasswordChange}
                                 />
                                 <Button 
                                     className="btn btn-primary login-btn pull-right"
