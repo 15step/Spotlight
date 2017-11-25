@@ -6,6 +6,8 @@ import Congress from './Congress';
 import Login from '../containers/Login';
 import Signup from '../containers/Signup';
 import Contact from '../containers/Contact';
+import Profile from '../components/Profile';
+import { Redirect } from 'react-router'
 
 const Main = () => (
   <main>
@@ -16,8 +18,23 @@ const Main = () => (
       <Route path="/congress" component={Congress}/>
       <Route path="/login" component={Login}/>
       <Route path="/signup" component={Signup}/>
+      <AuthenticatedProfileRoute path="/profile" component={Profile} />
     </Switch>
   </main>
 );
+
+const AuthenticatedProfileRoute = ({component: Profile, ...rest}) => (
+  <Route {...rest} render={props => (
+    sessionStorage.getItem('jwtToken') ? (
+      <Profile {...props} />
+    ) : (
+      <Redirect to={{
+        pathname: "/login",
+        state: {from: props.location}
+      }} />
+    )
+  )} />
+);
+
 
 export default Main;

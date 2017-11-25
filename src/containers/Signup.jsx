@@ -2,9 +2,11 @@ import * as React from 'react';
 import { Button, FormControl, ControlLabel } from 'react-bootstrap';
 import './User-Forms.css';
 import * as axios from 'axios';
+import AlertContainer from 'react-alert';
 
 
 class Signup extends React.Component{
+    
     constructor(props) {
         super(props);
     
@@ -43,15 +45,18 @@ class Signup extends React.Component{
 
     handleSubmit(event) {
         event.preventDefault();
+        if(this.state.password === this.state.passwordConfirmation) {
+            axios.post('/signup', {
+                username: this.state.email,
+                password: this.state.password
+            }).then((response) => {
+                console.log(this.state.email);
+                console.log(this.state.password);
+                console.log(response);
+            });
+        } else {            
 
-        axios.post('/signup', {
-            username: this.state.email,
-            password: this.state.password
-        }).then((response) => {
-            console.log(this.state.email);
-            console.log(this.state.password);
-            console.log(response);
-        });
+        }        
     }
     
     render() {

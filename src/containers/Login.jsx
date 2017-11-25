@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Button, FormControl, ControlLabel } from 'react-bootstrap';
+import { Button, FormControl, ControlLabel, PageHeader } from 'react-bootstrap';
 import './User-Forms.css';
 import * as axios from 'axios';
-
+import { Redirect } from 'react-router'
 
 class Login extends React.Component {
     constructor(props) {
@@ -10,7 +10,8 @@ class Login extends React.Component {
     
         this.state = {
             email: '',
-            password: ''
+            password: '',
+            fireRedirect: false
         };
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);        
@@ -34,17 +35,18 @@ class Login extends React.Component {
     }
 
     handleSubmit(event) {
-        // TODO.  Handle submission of data
         event.preventDefault();
 
         axios.post('/login', {
             username: this.state.email,
-            password: this.state.password
+            password: this.state.password,
+            token: sessionStorage.getItem('token')
         }).then((response) => {
-            console.log(response);
             if(response.status === 200) {
-                sessionStorage.setItem('jwtToken', response.data.token);                
-                console.log(response.data.message);
+                sessionStorage.setItem('jwtToken', response.data.token);    
+                this.setState({
+                    fireRedirect: true
+                });         
             } 
             else if(response.status === 401) {
                 console.log("User unauthorized");
@@ -53,6 +55,8 @@ class Login extends React.Component {
     }
 
     render() {
+        const { from } = this.props.location.state || '/';
+        const { fireRedirect } = this.state; 
         return(
             <div className="container user-form-group">
                 <div className="row">
@@ -84,6 +88,9 @@ class Login extends React.Component {
                                     Login
                                 </Button>
                             </form>
+                            {fireRedirect && (
+                                <Redirect to={from || "/profile"} />
+                            )}
                         </div>
                     </div>
                 </div>

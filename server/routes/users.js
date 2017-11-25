@@ -13,7 +13,7 @@ mongoose.createConnection('mongodb://localhost/spotlight');
 router.post("/login", (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
-
+    
     User.findOne({'email' : username}, (err, user) => {
         if(err) {
             return res.status(401).json({
@@ -30,7 +30,7 @@ router.post("/login", (req, res) => {
         else {
             bcrypt.compare(req.body.password, user.password, (err, valid) => {
                 if(!valid) {
-                    res.status(401).json({
+                    return res.status(401).json({
                         error: true,
                         message: "User"
                     });
@@ -38,7 +38,7 @@ router.post("/login", (req, res) => {
 
                 let jwtToken = utils.generateToken(user);
 
-                res.status(200).json({
+                return res.status(200).json({
                     success: true,
                     err: null,
                     token: jwtToken,
@@ -55,14 +55,14 @@ router.post("/signup", (req, res) => {
 
     User.findOne({'email' : username}, (err, user) => {
         if(err) {
-            res.status(401).json({
+            return res.status(401).json({
                 success: false,
                 token: null,
                 message: "Error processing signup, please try again"
             });
         }
        else if(user) {
-            res.status(401).json({
+            return res.status(401).json({
                 success: false,
                 token: null,
                 message: "A user already exists with this username"
@@ -76,13 +76,13 @@ router.post("/signup", (req, res) => {
             
             newUser.save((err) => {
                 if(err) {
-                    res.status(401).json({
+                    return res.status(401).json({
                         success: false,
                         token: null,
                         message: "There was an error saving you to the service"
                     });           
                 }
-                res.status(200).json({
+                return res.status(200).json({
                     success: true,
                     token: null,
                     err: null
@@ -91,11 +91,5 @@ router.post("/signup", (req, res) => {
         });
     });
 });
-
-// router.get('/', jwtMW /* Using the express jwt MW here */, (req, res) => {
-//     res.send('You are authenticated'); //Sending some response when authenticated
-// });
-
-
 
 module.exports = router;
