@@ -10,10 +10,12 @@ class Signup extends React.Component{
     
         this.state = {
             email: '',
-            password: ''
+            password: '',
+            passwordConfirmation: ''
         };
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);        
+        this.handlePasswordConfChange = this.handlePasswordConfChange.bind(this);                
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -33,6 +35,12 @@ class Signup extends React.Component{
         });     
     }
 
+    handlePasswordConfChange(event) {
+        this.setState({
+            passwordConfirmation: event.currentTarget.value,
+        });     
+    }
+
     handleSubmit(event) {
         event.preventDefault();
 
@@ -40,6 +48,8 @@ class Signup extends React.Component{
             username: this.state.email,
             password: this.state.password
         }).then((response) => {
+            console.log(this.state.email);
+            console.log(this.state.password);
             console.log(response);
         });
     }
@@ -57,6 +67,7 @@ class Signup extends React.Component{
                                     type="text"
                                     label="Email Address"
                                     placeholder="Email Address"
+                                    onChange={this.handleEmailChange}
                                 />
                                 <ControlLabel>Password</ControlLabel>
                                 <FormControl    
@@ -64,6 +75,7 @@ class Signup extends React.Component{
                                     type="password"
                                     label="Password"
                                     placeholder="Password"
+                                    onChange={this.handlePasswordChange}
                                 />
                                 <ControlLabel>Password Confirmation</ControlLabel>
                                 <FormControl    
@@ -71,6 +83,7 @@ class Signup extends React.Component{
                                     type="password"
                                     label="Password Confiormation"
                                     placeholder="Password Confirmation"
+                                    onChange={this.handlePasswordConfChange}
                                 />
                                 <Button 
                                     className="btn btn-primary signup-btn pull-right"

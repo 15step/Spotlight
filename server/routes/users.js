@@ -2,17 +2,19 @@ const express = require("express");
 const jwt = require('jsonwebtoken');
 const exjwt = require('express-jwt');
 const bcrypt = require('bcrypt-nodejs');
-const userCollection = "../models/User";
+const mongoose = require('mongoose');
+const User = require("../models/User");
 const router = express.Router();
 
 
+mongoose.createConnection('mongodb://localhost/spotlight');
 
 router.post("/login", (req, res) => {
     console.log("Hello from login");
     const username = req.body.username;
     const password = req.body.password;
 
-    userCollection.findOne({'email' : username}, (err, user) => {
+    User.findOne({'email' : username}, (err, user) => {
         if(err) {
             res.status(401).json({
                 success: false,
@@ -37,11 +39,10 @@ router.post("/login", (req, res) => {
 });
 
 router.post("/signup", (req, res) => {
-    console.log("Hello from signup");
     const username = req.body.username;
     const password = req.body.password;
 
-    userCollection.findOne({'email' : username}, (err, user) => {
+    User.findOne({'email' : username}, (err, user) => {
         if(err) {
             res.status(401).json({
                 success: false,
@@ -58,12 +59,11 @@ router.post("/signup", (req, res) => {
         }
 
         bcrypt.hash(password, null, null, (err, hash) => {
-            let newUser = {
-                email: username,
-                password: hash
-            };
+            let newUser = new User();
+            newUser.email = username;
+            newUser.password = hash
             
-            userCollection.save((err) => {
+            newUser.save((err) => {
                 if(err) {
                     res.status(401).json({
                         success: false,

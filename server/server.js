@@ -8,16 +8,17 @@ const app = express();
 
 // instantiating routes
 const configRoutes = require("./routes");
-configRoutes(app);
-
-
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+mongoose.connect('mongodb://localhost/spotlight');
+
+configRoutes(app);
+
+
 //MongoDB Mongoose Connection
 
-mongoose.connect('mongodb://localhost/spotlight');
 
 // Instantiating the express-jwt middleware
 const jwtMW = exjwt({
