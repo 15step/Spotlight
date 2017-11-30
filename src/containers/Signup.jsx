@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Button, FormControl, ControlLabel } from 'react-bootstrap';
 import './User-Forms.css';
 import * as axios from 'axios';
-import AlertContainer from 'react-alert';
 
 
 class Signup extends React.Component{

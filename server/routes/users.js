@@ -31,13 +31,13 @@ router.post("/login", (req, res) => {
             bcrypt.compare(req.body.password, user.password, (err, valid) => {
                 if(!valid) {
                     return res.status(401).json({
+                        success: false,
                         error: true,
                         message: "User"
                     });
                 }
 
                 let jwtToken = utils.generateToken(user);
-
                 return res.status(200).json({
                     success: true,
                     err: null,

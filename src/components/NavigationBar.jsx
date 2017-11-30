@@ -19,12 +19,14 @@ const NavigationBar = () => {
                     <LinkContainer to="/contact">
                         <NavItem eventKey={2} href="#">Contact</NavItem>
                     </LinkContainer>
-                    <LinkContainer to="/signup">
-                        <NavItem eventKey={3} href="#">Signup</NavItem>
-                    </LinkContainer>
-                    <LinkContainer to="/login">
-                    <NavItem eventKey={4} href="#">Login</NavItem>
-                    </LinkContainer>
+                    {!sessionStorage.getItem('token') &&
+                        <LinkContainer to="/signup">
+                            <NavItem eventKey={3} href="#">Signup</NavItem>
+                        </LinkContainer>
+                        <LinkContainer to="/login">
+                            <NavItem eventKey={4} href="#">Login</NavItem>
+                        </LinkContainer>
+                    }
                 </Nav>
             </Navbar>
         );

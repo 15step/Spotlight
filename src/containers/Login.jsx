@@ -11,7 +11,8 @@ class Login extends React.Component {
         this.state = {
             email: '',
             password: '',
-            fireRedirect: false
+            fireRedirect: false,
+            failedLogin: false
         };
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);        
@@ -48,15 +49,18 @@ class Login extends React.Component {
                     fireRedirect: true
                 });         
             } 
-            else if(response.status === 401) {
-                console.log("User unauthorized");
-            }
-        });
+        }).catch((error) => {
+            console.log(error.response);
+            this.setState({
+                failedLogin: true
+            })
+        })
     }
 
     render() {
         const { from } = this.props.location.state || '/';
         const { fireRedirect } = this.state; 
+        const { failedLogin } = this.state;
         return(
             <div className="container user-form-group">
                 <div className="row">
@@ -94,6 +98,10 @@ class Login extends React.Component {
                         </div>
                     </div>
                 </div>
+                {failedLogin
+                    ? <p className="alert alert-danger">Incorrect username or password</p> 
+                    : <p></p>
+                }
             </div>
         );
     }
