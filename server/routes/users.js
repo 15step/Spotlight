@@ -10,6 +10,43 @@ const utils = require('../utils/spotlightUtils');
 
 mongoose.createConnection('mongodb://localhost/spotlight');
 
+router.get("/profile", (req, res) => {
+    console.log(req.body);
+    // let decodedToken= jwt.decode(req.body.token);
+    console.log(decodedToken);
+    if(decodedToken) {
+        let userId = decodedToken._id;
+
+        User.findOne({'_id' : userId}, (err, user) => {
+            if(err) {
+                return res.status(500).json({
+                    success: false,
+                    message: "Error retreving user data"
+                });
+            }
+            else if(user === null) {
+                return res.status(401).json({
+                    success: false,
+                    message: "Username or password invalid"
+                });
+            }
+            else {
+                let userData = {
+                    email: user.email,
+                    name: user.profile.name,
+                    location: user.profile.location
+                };
+
+                return res.status(200).json({
+                    success: true,
+                    data: userData
+                });
+            }
+        })
+
+    }
+});
+
 router.post("/login", (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
@@ -42,6 +79,7 @@ router.post("/login", (req, res) => {
                     success: true,
                     err: null,
                     token: jwtToken,
+                    userId: user._id,
                     message: "You have been authenticated"
                 });
             });

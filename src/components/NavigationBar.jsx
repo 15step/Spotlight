@@ -1,8 +1,11 @@
 import * as React from 'react';
 import { Navbar, NavbarBrand, Nav, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+import logout from '../actions/userActions/logout';
+
 
 const NavigationBar = () => {
+    let jwtToken = sessionStorage.getItem('jwtToken');
         return (
             <Navbar inverse={true}>
                 <Navbar.Header>
@@ -19,12 +22,19 @@ const NavigationBar = () => {
                     <LinkContainer to="/contact">
                         <NavItem eventKey={2} href="#">Contact</NavItem>
                     </LinkContainer>
-                    {!sessionStorage.getItem('token') &&
+                    {!sessionStorage.getItem('jwtToken') &&
                         <LinkContainer to="/signup">
                             <NavItem eventKey={3} href="#">Signup</NavItem>
                         </LinkContainer>
+                    }
+                    {!sessionStorage.getItem('jwtToken') &&
                         <LinkContainer to="/login">
                             <NavItem eventKey={4} href="#">Login</NavItem>
+                        </LinkContainer>
+                    }
+                    {sessionStorage.getItem('jwtToken') &&
+                        <LinkContainer to="/">
+                            <NavItem eventKey={5} href="#" onClick={logout}>Logout</NavItem>
                         </LinkContainer>
                     }
                 </Nav>

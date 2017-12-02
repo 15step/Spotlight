@@ -6,7 +6,7 @@ import Congress from './Congress';
 import Login from '../containers/Login';
 import Signup from '../containers/Signup';
 import Contact from '../containers/Contact';
-import Profile from '../components/Profile';
+import Profile from '../containers/Profile';
 import { Redirect } from 'react-router'
 
 const Main = () => (
@@ -18,6 +18,7 @@ const Main = () => (
       <Route path="/congress" component={Congress}/>
       <Route path="/login" component={Login}/>
       <Route path="/signup" component={Signup}/>
+      <Route path="/logout" component={Home}/>
       <AuthenticatedProfileRoute path="/profile" component={Profile} />
     </Switch>
   </main>
