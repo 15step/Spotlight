@@ -13,39 +13,33 @@ mongoose.connect('mongodb://localhost/spotlight', {
 });
 
 router.get("/profile/:id", (req, res) => {
-    let userId = req.body.id;
-    if(userId) {
-        User.findOne({'_id' : userId}, (err, user) => {
-            if(err) {
-                console.log("in err")
-                return res.status(500).json({
-                    success: false,
-                    message: "Error retreving user data"
-                });
-            }
-            else if(user === null) {
-                console.log("user is null");
-                return res.status(401).json({
-                    success: false,
-                    message: "Username or password invalid"
-                });
-            }
-            else {
-                console.log("found user")
-                let userData = {
-                    email: user.email,
-                    name: user.profile.name,
-                    location: user.profile.location
-                };
+    let userId = req.params.id;
+    User.findOne({'_id' : userId}, (err, user) => {
+        if(err) {
+            return res.status(500).json({
+                success: false,
+                message: "Error retreving user data"
+            });
+        }
+        else if(user === null) {
+            return res.status(401).json({
+                success: false,
+                message: "Username or password invalid"
+            });
+        }
+        else {
+            let userData = {
+                email: user.email,
+                name: user.profile.name,
+                location: user.profile.location
+            };
 
-                return res.status(200).json({
-                    success: true,
-                    data: userData
-                });
-            }
-        })
-
-    }
+            return res.status(200).json({
+                success: true,
+                userData
+            });
+        }
+    })
 });
 
 router.post("/login", (req, res) => {
