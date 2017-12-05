@@ -1,30 +1,31 @@
 import * as React from 'react';
 import axios from 'axios';
+import jwt from 'jsonwebtoken';
 
-class Profile extends React.Component {
-
-
-    componentWillMount() {
+const Profile = (props) => {
         let token = sessionStorage.getItem('jwtToken');
-        console.log("From Profile!");
-        if(token) {
-            axios.get('/profile', {
-                token: token
-            }).then((response) => {
+        let userId = jwt.decode(token)._id;
+        console.log(userId);
+        if(userId) {
+            axios.get(`/profile/${userId}`)
+            .then((response) => {
                 console.log(response);
             }).catch((error) => {
                 console.log(error);
             });    
+            return(
+                <div>
+                    This is user profile        
+                </div>
+            )    
+        } else {
+            return(
+                <div>
+                    Could not retrieve user data        
+                </div>
+            )    
         }
     }
 
-    render() {
-        return(
-            <div>
-            This is the user's profile page.
-        </div>
-        )
-    }
-};
 
 export default Profile;

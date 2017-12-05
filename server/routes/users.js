@@ -8,29 +8,30 @@ const router = express.Router();
 const utils = require('../utils/spotlightUtils');
 
 
-mongoose.createConnection('mongodb://localhost/spotlight');
+mongoose.connect('mongodb://localhost/spotlight', {
+    useMongoClient: true
+});
 
-router.get("/profile", (req, res) => {
-    console.log(req.body);
-    // let decodedToken= jwt.decode(req.body.token);
-    console.log(decodedToken);
-    if(decodedToken) {
-        let userId = decodedToken._id;
-
+router.get("/profile/:id", (req, res) => {
+    let userId = req.body.id;
+    if(userId) {
         User.findOne({'_id' : userId}, (err, user) => {
             if(err) {
+                console.log("in err")
                 return res.status(500).json({
                     success: false,
                     message: "Error retreving user data"
                 });
             }
             else if(user === null) {
+                console.log("user is null");
                 return res.status(401).json({
                     success: false,
                     message: "Username or password invalid"
                 });
             }
             else {
+                console.log("found user")
                 let userData = {
                     email: user.email,
                     name: user.profile.name,

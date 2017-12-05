@@ -8,6 +8,7 @@ import Signup from '../containers/Signup';
 import Contact from '../containers/Contact';
 import Profile from '../containers/Profile';
 import { Redirect } from 'react-router'
+import axios from 'axios';
 
 const Main = () => (
   <main>
@@ -24,18 +25,21 @@ const Main = () => (
   </main>
 );
 
-const AuthenticatedProfileRoute = ({component: Profile, ...rest}) => (
-  <Route {...rest} render={props => (
-    sessionStorage.getItem('jwtToken') ? (
-      <Profile {...props} />
-    ) : (
-      <Redirect to={{
-        pathname: "/login",
-        state: {from: props.location}
-      }} />
-    )
-  )} />
-);
+const AuthenticatedProfileRoute = ({component: Profile, ...rest}) => {
+  
+  return (
+    <Route {...rest} render={props => (
+      sessionStorage.getItem('jwtToken') ? (
+        <Profile {...props} />
+      ) : (
+        <Redirect to={{
+          pathname: "/login",
+          state: {from: props.location}
+        }} />
+      )
+    )} />  
+  )
+};
 
 
 export default Main;
