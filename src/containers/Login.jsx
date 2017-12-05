@@ -46,7 +46,7 @@ class Login extends React.Component {
             if(response.status === 200) {
                 sessionStorage.setItem('jwtToken', response.data.token);    
                 this.setState({
-                    fireRedirect: true
+                    fireRedirect: true  
                 });         
             } 
         }).catch((error) => {

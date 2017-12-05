@@ -12,16 +12,25 @@ class Signup extends React.Component{
         this.state = {
             email: '',
             password: '',
-            passwordConfirmation: ''
+            passwordConfirmation: '',
+            signupFail: false
         };
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);        
         this.handlePasswordConfChange = this.handlePasswordConfChange.bind(this);                
+        this.validateForm = this.validateForm.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     validateForm() {
-        // TODO write code to validate farm
+        if(this.state.password === this.state.passwordConfirmation){
+            return true;
+        } else {
+            this.setState({
+                signupFail: true
+            });
+            return false;
+        }
     }
 
     handleEmailChange(event){
@@ -44,21 +53,22 @@ class Signup extends React.Component{
 
     handleSubmit(event) {
         event.preventDefault();
-        if(this.state.password === this.state.passwordConfirmation) {
-            axios.post('/signup', {
-                username: this.state.email,
-                password: this.state.password
-            }).then((response) => {
-                console.log(this.state.email);
-                console.log(this.state.password);
-                console.log(response);
-            });
-        } else {            
-
-        }        
+        if(this.validateForm()) {
+            if(this.state.password === this.state.passwordConfirmation) {
+                axios.post('/signup', {
+                    username: this.state.email,
+                    password: this.state.password
+                }).then((response) => {
+                    console.log(this.state.email);
+                    console.log(this.state.password);
+                    console.log(response);
+                });
+            } 
+        }      
     }
     
     render() {
+        const { signupFail } = this.state;        
         return(
             <div className="container user-form-group">
                 <div className="row">
@@ -101,6 +111,10 @@ class Signup extends React.Component{
                         </div>
                     </div>
                 </div>
+                {signupFail
+                    ? <p className="alert alert-danger">Password and confirmation did not match</p>
+                    : <p></p>
+                }
             </div>
         );
     }
