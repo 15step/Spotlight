@@ -2,42 +2,49 @@ import * as React from 'react';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 
-const profileView = (response) => {
-    if(response.status !== 200) {
-        return (
-            <p>There was an issue gathering your data</p>
-        );
-    }
-    return(
-        <ul>
-            <li>This is a table for FCC things</li>
-        </ul>
-    )
-} 
+class Profile extends React.Component {
+    constructor(props) {
+        super(props);
 
-const Profile = (props) => {
-    let token = sessionStorage.getItem('jwtToken');
-    let userId = jwt.decode(token)._id;
-    console.log(userId);
-    if(userId) {
-        axios.get(`/profile/${userId}`)
-        .then((response) => {
-            console.log(response);  
-            let userData = response.data.userData;
-            return(
-                <div>
-                    <h2>{userData.email}</h2>
-                </div>
-            )        
-        }).catch((error) => {
-            return(
-                <div>
-                    <p>Could not retrieve user data</p>
-                </div>
-            )    
-        });    
+        this.state = {
+            user: {},
+            hasUserData: false
+        }
     }
-}
+
+    componentWillMount() {
+        let token = sessionStorage.getItem('jwtToken');
+        let userId = jwt.decode(token)._id;
+        console.log(userId);
+        if(userId) {
+            axios.get(`/profile/${userId}`)
+            .then((response) => {
+                let userData = response.data.userData;
+                this.setState({
+                    user: userData,
+                    hasUserData: true
+                });
+            })
+            .catch((error) => {
+                this.setState({
+                    hasUserData: false
+                })
+            }); 
+        } 
+    }
+
+    render() {
+        const { hasUserData } = this.state;
+        return (
+            <div>
+                {hasUserData
+                    ? <h2>{this.state.user.email}</h2>
+                    : <h2>Nope</h2>
+                }
+            </div>                
+            )
+        }
+    }
 
 
 export default Profile;

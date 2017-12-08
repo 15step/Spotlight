@@ -26,7 +26,6 @@ const Main = () => (
 );
 
 const AuthenticatedProfileRoute = ({component: Profile, ...rest}) => {
-  
   return (
     <Route {...rest} render={props => (
       sessionStorage.getItem('jwtToken') ? (
