@@ -44,19 +44,18 @@ class Login extends React.Component {
 
     handleSubmitPasswordReset(event) {
         event.preventDefault();
-        
+
         axios.post('/password-reset', {
             email: this.state.passwordResetEmail
         }).then((response) => {
             if(response.status === 200) {
                 this.setState({
-                    fireRedirect: true,
                     hasResetPassword: true
                 });
             }
         }).catch((error) => {
             this.setState({
-                hasResetPassword: true
+                hasResetPassword: false
             })
         })
     }

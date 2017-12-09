@@ -132,16 +132,30 @@ router.post("/password-reset", (req, res) => {
     User.findOne({'email' : email}, (err, user) => {
         if(err) {
             return res.status(200).json({
-                success: false
+                success: true
+            });
+        }
+        else if(user === null) {
+            return res.status(200).json({
+                success: true
             });
         }
        else if(user) {
-           //submit email
-            return res.status(200).json({
-                success: true,
-            });
+           let token = utils.generatePasswordResetToken();        
+           bcrypt.hash(token, null, null, (err, hash) => {
+               User.findOneAndUpdate({'email' : user.email}, {$set: { passwordResetToken : hash }}, (err, cb) => {
+                   if(err) {
+                       console.log(err);
+                    } else {
+                        utils.sendPasswordReset();           
+                        return res.status(200).json({
+                            success: true
+                        });
+                    }
+                });
+           });
         }
-    })
+    });
 });
 
 module.exports = router;

@@ -2,19 +2,18 @@ import * as React from 'react';
 import { Button, FormControl, ControlLabel } from 'react-bootstrap';
 
 const PasswordReset = (props) => {
-    console.log(props);
     return (
-        <div class="row">
-            <div class="col-md-4 col-md-offset-4">
-                <p className="alert alert-danger">Incorrect username or password. 
-                    Please try again or reset your password</p> 
+        <div className="row">
+            <div className="col-md-4 col-md-offset-4">
+                <p className="alert alert-danger">Incorrect username or password.</p> 
+                <p>Please try again or enter the email address associated with your account below
+                    to receive a temporary password.</p>
                 <form onSubmit={props.submitPasswordReset}>
-                <ControlLabel>Email Address</ControlLabel>
                     <FormControl    
                         id="formPasswordReset"
                         type="text"
                         label="Email Address"
-                        placeholder=""
+                        placeholder="Email Address"
                         onChange={props.handlePasswordResetChange}
                     />
                     <Button 
