@@ -5,14 +5,8 @@ const userSchema = new mongoose.Schema({
   email: { type: String, unique: true },
   password: String,
   passwordResetToken: String,
-  passwordResetExpires: Date,
-
   profile: {
     name: String,
-    gender: String,
-    location: String,
-    website: String,
-    picture: String
   }
 }, { timestamps: true });
 

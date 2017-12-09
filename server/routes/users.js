@@ -14,6 +14,7 @@ mongoose.connect('mongodb://localhost/spotlight', {
 
 router.get("/profile/:id", (req, res) => {
     let userId = req.params.id;
+    console.log(userId);
     User.findOne({'_id' : userId}, (err, user) => {
         if(err) {
             return res.status(500).json({
@@ -123,6 +124,24 @@ router.post("/signup", (req, res) => {
             });
         });
     });
+});
+
+router.post("/password-reset", (req, res) => {
+    const email = req.body.email;
+
+    User.findOne({'email' : email}, (err, user) => {
+        if(err) {
+            return res.status(200).json({
+                success: false
+            });
+        }
+       else if(user) {
+           //submit email
+            return res.status(200).json({
+                success: true,
+            });
+        }
+    })
 });
 
 module.exports = router;

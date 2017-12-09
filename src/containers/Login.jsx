@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Button, FormControl, ControlLabel, PageHeader } from 'react-bootstrap';
+import { Button, FormControl, ControlLabel } from 'react-bootstrap';
 import './User-Forms.css';
 import * as axios from 'axios';
 import { Redirect } from 'react-router'
+import PasswordReset from '../components/PasswordReset';
 
 class Login extends React.Component {
     constructor(props) {
@@ -12,15 +13,15 @@ class Login extends React.Component {
             email: '',
             password: '',
             fireRedirect: false,
-            failedLogin: false
+            failedLogin: false,
+            hasResetPassword: false,
+            passwordResetEmail: false
         };
         this.handleEmailChange = this.handleEmailChange.bind(this);
-        this.handlePasswordChange = this.handlePasswordChange.bind(this);        
+        this.handlePasswordChange = this.handlePasswordChange.bind(this); 
+        this.handlePasswordResetChange = this.handlePasswordResetChange.bind(this);
+        this.handleSubmitPasswordReset = this.handleSubmitPasswordReset.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    validateForm() {
-        // TODO write code to validate farm
     }
 
     handleEmailChange(event) {
@@ -33,6 +34,31 @@ class Login extends React.Component {
         this.setState({
             password: event.currentTarget.value,
         });     
+    }
+
+    handlePasswordResetChange(event) {
+        this.setState({
+            passwordResetEmail: event.currentTarget.value
+        })
+    }
+
+    handleSubmitPasswordReset(event) {
+        event.preventDefault();
+        
+        axios.post('/password-reset', {
+            email: this.state.passwordResetEmail
+        }).then((response) => {
+            if(response.status === 200) {
+                this.setState({
+                    fireRedirect: true,
+                    hasResetPassword: true
+                });
+            }
+        }).catch((error) => {
+            this.setState({
+                hasResetPassword: true
+            })
+        })
     }
 
     handleSubmit(event) {
@@ -50,10 +76,9 @@ class Login extends React.Component {
                 });         
             } 
         }).catch((error) => {
-            console.log(error.response);
             this.setState({
                 failedLogin: true
-            })
+            });
         })
     }
 
@@ -99,7 +124,8 @@ class Login extends React.Component {
                     </div>
                 </div>
                 {failedLogin
-                    ? <p className="alert alert-danger">Incorrect username or password</p> 
+                    ? <PasswordReset handlePasswordResetChange={this.handlePasswordResetChange} 
+                    submitPasswordReset={this.handleSubmitPasswordReset} isReset={this.state.hasResetPassword}/>
                     : <p></p>
                 }
             </div>

@@ -1,3 +1,5 @@
+import { PageHeader } from "../../../../Library/Caches/typescript/2.6/node_modules/@types/react-bootstrap";
+
 const jwt = require("jsonwebtoken");
 
 
@@ -18,6 +20,11 @@ function generateToken(user) {
     });
 
     return token;
+}
+
+function generatePasswordResetToken() {
+
+    
 }
 
 module.exports = {
