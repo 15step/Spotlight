@@ -60,13 +60,30 @@ router.post("/login", (req, res) => {
                 message: "Username or password invalid"
             });
         }
+        else if(user.passwordResetToken !== null) { //user resetting password
+            let passwordBcrpyt = bcrypt.hashSync(password);
+            bcrypt.compare(password, user.passwordResetToken, (err, valid) => {
+                console.log(passwordBcrpyt);
+                console.log(user.passwordResetToken);                
+                if(!valid) {
+                    console.log("reset token not valid!")                    
+                    return res.status(401).json({
+                        success: false,
+                        error: true
+                    });
+                }
+                return res.status(200).json({
+                    success: true,
+                    resetPassword: true
+                });
+            })
+        }
         else {
-            bcrypt.compare(req.body.password, user.password, (err, valid) => {
+            bcrypt.compare(password, user.password, (err, valid) => {
                 if(!valid) {
                     return res.status(401).json({
                         success: false,
-                        error: true,
-                        message: "User"
+                        error: true
                     });
                 }
 
@@ -141,7 +158,7 @@ router.post("/password-reset", (req, res) => {
             });
         }
        else if(user) {
-           let token = utils.generatePasswordResetToken();        
+           let token = utils.generatePasswordResetToken().toString();        
            bcrypt.hash(token, null, null, (err, hash) => {
                User.findOneAndUpdate({'email' : user.email}, {$set: { passwordResetToken : hash }}, (err, cb) => {
                    if(err) {
@@ -155,6 +172,31 @@ router.post("/password-reset", (req, res) => {
                 });
            });
         }
+    });
+});
+
+router.post("new-password", (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    bcrypt.hash(password, null, null, (err, hash) => {
+        User.findOneAndUpdate({'email' : username}, { $set: { password : hash, passwordResetToken: null }}, (err, user) => {
+            if(err) {
+                return res.status(401).json({
+                    success: false
+                });
+            }
+            else if(user === null) {
+                return res.status(401).json({
+                    success: true
+                });
+            }
+            else if(user) {
+                return res.status(200).json({
+                    success: true
+                });
+            }
+        });
     });
 });
 
