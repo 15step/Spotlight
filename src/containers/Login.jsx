@@ -2,7 +2,8 @@ import * as React from 'react';
 import { Button, FormControl, ControlLabel } from 'react-bootstrap';
 import './User-Forms.css';
 import * as axios from 'axios';
-import { Redirect } from 'react-router'
+import { Redirect } from 'react-router';
+import { Link } from 'react-router-dom';
 import PasswordReset from '../components/PasswordReset';
 
 class Login extends React.Component {
@@ -122,10 +123,12 @@ class Login extends React.Component {
                         </div>
                     </div>
                 </div>
-                {failedLogin
-                    ? <PasswordReset handlePasswordResetChange={this.handlePasswordResetChange} 
-                    submitPasswordReset={this.handleSubmitPasswordReset} isReset={this.state.hasResetPassword}/>
-                    : <p></p>
+                {failedLogin &&
+                    <div className="row">
+                        <div className="col-md-4 col-md-offset-4">            
+                        <p className="alert alert-danger">Incorrect username or password.  Have you <Link to={"/password-reset"}>forgotten your password?</Link></p>
+                        </div>
+                    </div>
                 }
             </div>
         );

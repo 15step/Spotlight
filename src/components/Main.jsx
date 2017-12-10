@@ -7,8 +7,8 @@ import Login from '../containers/Login';
 import Signup from '../containers/Signup';
 import Contact from '../containers/Contact';
 import Profile from '../containers/Profile';
+import PasswordReset from '../components/PasswordReset';
 import { Redirect } from 'react-router'
-import axios from 'axios';
 
 const Main = () => (
   <main>
@@ -20,6 +20,7 @@ const Main = () => (
       <Route path="/login" component={Login}/>
       <Route path="/signup" component={Signup}/>
       <Route path="/logout" component={Home}/>
+      <Route path="/password-reset" component={PasswordReset}/>
       <AuthenticatedProfileRoute path="/profile" component={Profile} />
     </Switch>
   </main>

@@ -1,13 +1,14 @@
 import * as React from 'react';
-import { Button, FormControl, ControlLabel } from 'react-bootstrap';
+import { Button, FormControl } from 'react-bootstrap';
+import { Link } from 'react-router-bootstrap';
 
 const PasswordReset = (props) => {
     return (
         <div className="row">
+            <h1>Reset your Password</h1>
             <div className="col-md-4 col-md-offset-4">
-                <p className="alert alert-danger">Incorrect username or password.</p> 
-                <p>Please try again or enter the email address associated with your account below
-                    to receive a temporary password.</p>
+            <p>Please fill provide your email address below and we will send you a temporary password
+                to access your account</p>
                 <form onSubmit={props.submitPasswordReset}>
                     <FormControl    
                         id="formPasswordReset"
@@ -28,7 +29,6 @@ const PasswordReset = (props) => {
                 {props.isReset &&
                     <p className="alert alert-success">Please check your email for a password reset token</p>
                 }
-
         </div>
     </div>
 

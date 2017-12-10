@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button, FormControl, ControlLabel } from 'react-bootstrap';
 import './User-Forms.css';
 import * as axios from 'axios';
-
+import { Redirect } from 'react-router';
 
 class Signup extends React.Component{
     
@@ -13,7 +13,8 @@ class Signup extends React.Component{
             email: '',
             password: '',
             passwordConfirmation: '',
-            signupFail: false
+            signupFail: false,
+            fireRedirect: false
         };
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);        
@@ -23,7 +24,22 @@ class Signup extends React.Component{
     }
 
     validateForm() {
-        if(this.state.password === this.state.passwordConfirmation){
+        let emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        let validEmail = emailRegex.test(this.state.email);
+
+        if(!validEmail) {
+            this.setState({
+                signupFail: true
+            });
+            return false;
+        }
+        else if(this.state.password.length < 8) {
+            this.setState({
+                signupFail: true
+            });
+            return false;
+        }
+        else if(this.state.password === this.state.passwordConfirmation) {
             return true;
         } else {
             this.setState({
@@ -53,22 +69,24 @@ class Signup extends React.Component{
 
     handleSubmit(event) {
         event.preventDefault();
-        if(this.validateForm()) {
-            if(this.state.password === this.state.passwordConfirmation) {
-                axios.post('/signup', {
-                    username: this.state.email,
-                    password: this.state.password
-                }).then((response) => {
-                    console.log(this.state.email);
-                    console.log(this.state.password);
-                    console.log(response);
+        let isValidForm = this.validateForm();
+        if(isValidForm) {
+            axios.post('/signup', {
+                username: this.state.email,
+                password: this.state.password
+            }).then((response) => {
+                this.setState({
+                    fireRedirect: true
                 });
-            } 
+            });
+            
         }      
     }
     
     render() {
-        const { signupFail } = this.state;        
+        const { from } = this.props.location.state || '/';        
+        const { signupFail } = this.state;  
+        const { fireRedirect } = this.state;      
         return(
             <div className="container user-form-group">
                 <div className="row">
@@ -111,9 +129,13 @@ class Signup extends React.Component{
                         </div>
                     </div>
                 </div>
-                {signupFail
-                    ? <p className="alert alert-danger">Password and confirmation did not match</p>
-                    : <p></p>
+                {signupFail &&
+                    <p className="alert alert-danger">Sorry your info was not valid.  Please make sure that 
+                    you are providing a valid email address, that your passwords match and that your password is atleast.
+                    8 characters</p>
+                }
+                {fireRedirect && 
+                    <Redirect to={from || "/login"} />                                                    
                 }
             </div>
         );
