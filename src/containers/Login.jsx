@@ -15,13 +15,10 @@ class Login extends React.Component {
             password: '',
             fireRedirect: false,
             failedLogin: false,
-            hasResetPassword: false,
-            passwordResetEmail: false
         };
+        
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this); 
-        this.handlePasswordResetChange = this.handlePasswordResetChange.bind(this);
-        this.handleSubmitPasswordReset = this.handleSubmitPasswordReset.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -37,29 +34,6 @@ class Login extends React.Component {
         });     
     }
 
-    handlePasswordResetChange(event) {
-        this.setState({
-            passwordResetEmail: event.currentTarget.value
-        })
-    }
-
-    handleSubmitPasswordReset(event) {
-        event.preventDefault();
-
-        axios.post('/password-reset', {
-            email: this.state.passwordResetEmail
-        }).then((response) => {
-            if(response.status === 200) {
-                this.setState({
-                    hasResetPassword: true
-                });
-            }
-        }).catch((error) => {
-            this.setState({
-                hasResetPassword: false
-            })
-        })
-    }
 
     handleSubmit(event) {
         event.preventDefault();
