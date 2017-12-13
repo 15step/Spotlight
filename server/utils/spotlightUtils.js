@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
+const randomString = require("randomstring");
 
 let transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -37,12 +38,17 @@ function generateToken(user) {
 }
 
 function generatePasswordResetToken() {
-    let token = Math.floor(Math.random()*900000) + 100000;
+    let token = randomString.generate({
+        length: 8,
+        charset: 'alphabetic'
+    });
+    console.log('generated token');
+    console.log(token);
+
     return token;
 }
 
-function sendPasswordReset() {
-    let token = generatePasswordResetToken();
+function sendPasswordReset(token) {
     let mailOptions = composeEmailOptions(token);
 
     transporter.sendMail(mailOptions, (err, info) => {

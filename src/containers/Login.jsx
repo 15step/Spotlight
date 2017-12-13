@@ -4,7 +4,7 @@ import './User-Forms.css';
 import * as axios from 'axios';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
-import PasswordReset from '../components/PasswordReset';
+import { NewPassword } from "./NewPassword";
 
 class Login extends React.Component {
     constructor(props) {
@@ -14,6 +14,7 @@ class Login extends React.Component {
             email: '',
             password: '',
             fireRedirect: false,
+            fireResetRedirect: false,
             failedLogin: false,
         };
         
@@ -43,12 +44,18 @@ class Login extends React.Component {
             password: this.state.password,
             token: sessionStorage.getItem('token')
         }).then((response) => {
-            if(response.status === 200) {
+            console.log(response);
+            if(response.status === 200 && response.resetPassword === true) {
+                this.setState({
+                    fireResetRedirect: true
+                });  
+            } 
+            else if(response.status === 200 && response.resetPassword === undefined) {
                 sessionStorage.setItem('jwtToken', response.data.token);    
                 this.setState({
                     fireRedirect: true  
-                });         
-            } 
+                });    
+            }
         }).catch((error) => {
             this.setState({
                 failedLogin: true
@@ -59,6 +66,7 @@ class Login extends React.Component {
     render() {
         const { from } = this.props.location.state || '/';
         const { fireRedirect } = this.state; 
+        const { fireResetRedirect } = this.state;
         const { failedLogin } = this.state;
         return(
             <div className="container user-form-group">
@@ -91,9 +99,12 @@ class Login extends React.Component {
                                     Login
                                 </Button>
                             </form>
-                            {fireRedirect && (
+                            {fireRedirect && 
                                 <Redirect to={from || "/profile"} />
-                            )}
+                            }
+                            {fireResetRedirect &&    
+                                <Redirect to={from || "/new-password"} />
+                            }
                         </div>
                     </div>
                 </div>

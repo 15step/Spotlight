@@ -7,7 +7,7 @@ import Login from '../containers/Login';
 import Signup from '../containers/Signup';
 import Contact from '../containers/Contact';
 import Profile from '../containers/Profile';
-import PasswordReset from '../components/PasswordReset';
+import PasswordReset from '../containers/PasswordReset';
 import { Redirect } from 'react-router'
 
 const Main = () => (

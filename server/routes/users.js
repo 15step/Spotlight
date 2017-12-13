@@ -1,6 +1,4 @@
 const express = require("express");
-const jwt = require('jsonwebtoken');
-const exjwt = require('express-jwt');
 const bcrypt = require('bcrypt-nodejs');
 const mongoose = require('mongoose');
 const User = require("../models/User");
@@ -46,6 +44,7 @@ router.get("/profile/:id", (req, res) => {
 router.post("/login", (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
+    console.log(password);
     
     User.findOne({'email' : username}, (err, user) => {
         if(err) {
@@ -61,10 +60,9 @@ router.post("/login", (req, res) => {
             });
         }
         else if(user.passwordResetToken !== null) { //user resetting password
-            let passwordBcrpyt = bcrypt.hashSync(password);
             bcrypt.compare(password, user.passwordResetToken, (err, valid) => {
-                console.log(passwordBcrpyt);
-                console.log(user.passwordResetToken);                
+                console.log(valid)
+                console.log(`user.passwordResetToken: ${user.passwordResetToken}`);                
                 if(!valid) {
                     console.log("reset token not valid!")                    
                     return res.status(401).json({
@@ -81,6 +79,7 @@ router.post("/login", (req, res) => {
         else {
             bcrypt.compare(password, user.password, (err, valid) => {
                 if(!valid) {
+                    console.log('not valid');
                     return res.status(401).json({
                         success: false,
                         error: true
@@ -88,6 +87,7 @@ router.post("/login", (req, res) => {
                 }
 
                 let jwtToken = utils.generateToken(user);
+                console.log("we did it!"); 
                 return res.status(200).json({
                     success: true,
                     err: null,
@@ -158,13 +158,13 @@ router.post("/password-reset", (req, res) => {
             });
         }
        else if(user) {
-           let token = utils.generatePasswordResetToken().toString();        
+           let token = utils.generatePasswordResetToken(); 
            bcrypt.hash(token, null, null, (err, hash) => {
-               User.findOneAndUpdate({'email' : user.email}, {$set: { passwordResetToken : hash }}, (err, cb) => {
+               User.update({'email' : user.email}, { passwordResetToken : hash }, (err, cb) => {
                    if(err) {
                        console.log(err);
                     } else {
-                        utils.sendPasswordReset();           
+                        utils.sendPasswordReset(token);           
                         return res.status(200).json({
                             success: true
                         });

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Button, FormControl } from 'react-bootstrap';
-import { Link } from 'react-router-bootstrap';
 import axios from 'axios';
 
 class PasswordReset extends React.Component {
@@ -12,10 +11,8 @@ class PasswordReset extends React.Component {
             passwordResetEmail: false,
             isReset: false
         }
-
         this.handlePasswordResetChange = this.handlePasswordResetChange.bind(this);
         this.handleSubmitPasswordReset = this.handleSubmitPasswordReset.bind(this);
-
     }
 
     handlePasswordResetChange(event) {
@@ -42,7 +39,6 @@ class PasswordReset extends React.Component {
             })
         })
     }
-
 
     render() {
         return (
