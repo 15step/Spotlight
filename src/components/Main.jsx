@@ -8,6 +8,7 @@ import Signup from '../containers/Signup';
 import Contact from '../containers/Contact';
 import Profile from '../containers/Profile';
 import PasswordReset from '../containers/PasswordReset';
+import NewPassword from '../containers/NewPassword';
 import { Redirect } from 'react-router'
 
 const Main = () => (
@@ -21,6 +22,7 @@ const Main = () => (
       <Route path="/signup" component={Signup}/>
       <Route path="/logout" component={Home}/>
       <Route path="/password-reset" component={PasswordReset}/>
+      <AuthenticatedNewPasswordRoute path="/new-password" component={NewPassword} />
       <AuthenticatedProfileRoute path="/profile" component={Profile} />
     </Switch>
   </main>
@@ -41,5 +43,19 @@ const AuthenticatedProfileRoute = ({component: Profile, ...rest}) => {
   )
 };
 
+const AuthenticatedNewPasswordRoute = ({component: Profile, ...rest}) => {
+  return (
+    <Route {...rest} render={props => (
+      sessionStorage.getItem('jwtToken') ? (
+        <NewPassword {...props} />
+      ) : (
+        <Redirect to={{
+          pathname: "/login",
+          state: {from: props.location}
+        }} />
+      )
+    )} />  
+  )
+};
 
 export default Main;

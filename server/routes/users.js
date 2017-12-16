@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const User = require("../models/User");
 const router = express.Router();
 const utils = require('../utils/spotlightUtils');
+const jwt = require("jsonwebtoken");
 
 
 mongoose.connect('mongodb://localhost/spotlight', {
@@ -44,9 +45,9 @@ router.get("/profile/:id", (req, res) => {
 router.post("/login", (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
-    console.log(password);
     
     User.findOne({'email' : username}, (err, user) => {
+        console.log(user);
         if(err) {
             return res.status(401).json({
                 success: false,
@@ -59,19 +60,20 @@ router.post("/login", (req, res) => {
                 message: "Username or password invalid"
             });
         }
-        else if(user.passwordResetToken !== null) { //user resetting password
+        else if(user.passwordResetToken) { //user resetting password
+            console.log("I ended up here and I shouldnt have");
             bcrypt.compare(password, user.passwordResetToken, (err, valid) => {
-                console.log(valid)
-                console.log(`user.passwordResetToken: ${user.passwordResetToken}`);                
                 if(!valid) {
-                    console.log("reset token not valid!")                    
                     return res.status(401).json({
                         success: false,
                         error: true
                     });
                 }
+                let jwtToken = utils.generateToken(user);
                 return res.status(200).json({
                     success: true,
+                    token: jwtToken,
+                    userId: user._id,
                     resetPassword: true
                 });
             })
@@ -85,9 +87,7 @@ router.post("/login", (req, res) => {
                         error: true
                     });
                 }
-
                 let jwtToken = utils.generateToken(user);
-                console.log("we did it!"); 
                 return res.status(200).json({
                     success: true,
                     err: null,
@@ -175,12 +175,13 @@ router.post("/password-reset", (req, res) => {
     });
 });
 
-router.post("new-password", (req, res) => {
-    const username = req.body.username;
+router.post("/new-password", (req, res) => {
+    let decodedToken = jwt.decode(req.body.token);
+    const username = decodedToken.username;
     const password = req.body.password;
-
+    
     bcrypt.hash(password, null, null, (err, hash) => {
-        User.findOneAndUpdate({'email' : username}, { $set: { password : hash, passwordResetToken: null }}, (err, user) => {
+        User.findOneAndUpdate({'email' : username}, {$set: { password : hash, passwordResetToken: null }}, (err, user) => {
             if(err) {
                 return res.status(401).json({
                     success: false

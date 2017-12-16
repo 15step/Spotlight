@@ -4,7 +4,6 @@ import './User-Forms.css';
 import * as axios from 'axios';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
-import { NewPassword } from "./NewPassword";
 
 class Login extends React.Component {
     constructor(props) {
@@ -44,14 +43,15 @@ class Login extends React.Component {
             password: this.state.password,
             token: sessionStorage.getItem('token')
         }).then((response) => {
-            console.log(response);
-            if(response.status === 200 && response.resetPassword === true) {
+            let responseData = response.data;
+            if(response.status === 200 && responseData.resetPassword === true) {
+                sessionStorage.setItem('jwtToken', response.data.token);
                 this.setState({
                     fireResetRedirect: true
                 });  
             } 
-            else if(response.status === 200 && response.resetPassword === undefined) {
-                sessionStorage.setItem('jwtToken', response.data.token);    
+            else if(response.status === 200 && responseData.resetPassword === undefined) {
+                sessionStorage.setItem('jwtToken', responseData.token);    
                 this.setState({
                     fireRedirect: true  
                 });    
