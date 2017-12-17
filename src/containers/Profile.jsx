@@ -8,7 +8,6 @@ class Profile extends React.Component {
 
         this.state = {
             user: {},
-            hasUserData: false
         }
     }
 
@@ -22,25 +21,18 @@ class Profile extends React.Component {
                 let userData = response.data.userData;
                 this.setState({
                     user: userData,
-                    hasUserData: true
                 });
             })
             .catch((error) => {
-                this.setState({
-                    hasUserData: false
-                })
+                console.log("Error getting user data");
             }); 
         } 
     }
 
     render() {
-        const { hasUserData } = this.state;
         return (
             <div>
-                {hasUserData
-                    ? <h2>{this.state.user.email}</h2>
-                    : <h2>Nope</h2>
-                }
+                <h2>{this.state.user.email}</h2>
             </div>                
             )
         }

@@ -9,6 +9,7 @@ import Contact from '../containers/Contact';
 import Profile from '../containers/Profile';
 import PasswordReset from '../containers/PasswordReset';
 import NewPassword from '../containers/NewPassword';
+import SearchContributors from '../containers/SearchContributors';
 import { Redirect } from 'react-router'
 
 const Main = () => (
@@ -23,6 +24,7 @@ const Main = () => (
       <Route path="/logout" component={Home}/>
       <Route path="/password-reset" component={PasswordReset}/>
       <AuthenticatedNewPasswordRoute path="/new-password" component={NewPassword} />
+      <AuthenticatedContributorSearchRoute path="/search" component={SearchContributors} />
       <AuthenticatedProfileRoute path="/profile" component={Profile} />
     </Switch>
   </main>
@@ -43,7 +45,7 @@ const AuthenticatedProfileRoute = ({component: Profile, ...rest}) => {
   )
 };
 
-const AuthenticatedNewPasswordRoute = ({component: Profile, ...rest}) => {
+const AuthenticatedNewPasswordRoute = ({component: NewPassword, ...rest}) => {
   return (
     <Route {...rest} render={props => (
       sessionStorage.getItem('jwtToken') ? (
@@ -58,4 +60,18 @@ const AuthenticatedNewPasswordRoute = ({component: Profile, ...rest}) => {
   )
 };
 
+const AuthenticatedContributorSearchRoute = ({component: SearchContributors, ...rest}) => {
+  return (
+    <Route {...rest} render={props => (
+      sessionStorage.getItem('jwtToken') ? (
+        <SearchContributors {...props} />
+      ) : (
+        <Redirect to={{
+          pathname: "/login",
+          state: {from: props.location}
+        }} />
+      )
+    )} />  
+  )
+};
 export default Main;

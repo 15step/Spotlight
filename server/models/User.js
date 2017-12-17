@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
   passwordResetToken: String,
   profile: {
     name: String,
+    contributors: []
   }
 }, { timestamps: true });
 

@@ -33,8 +33,13 @@ const NavigationBar = () => {
                         </LinkContainer>
                     }
                     {sessionStorage.getItem('jwtToken') &&
+                        <LinkContainer to="/search">
+                            <NavItem eventKey={5} href="#">Search</NavItem>
+                        </LinkContainer>
+                    }
+                    {sessionStorage.getItem('jwtToken') &&
                         <LinkContainer to="/">
-                            <NavItem eventKey={5} href="#" onClick={logout}>Logout</NavItem>
+                            <NavItem eventKey={6} href="#" onClick={logout}>Logout</NavItem>
                         </LinkContainer>
                     }
                 </Nav>
