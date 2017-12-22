@@ -1,13 +1,14 @@
 const bcrypt = require('bcrypt-nodejs');
 const mongoose = require('mongoose');
 
+
 const userSchema = new mongoose.Schema({
   email: { type: String, unique: true },
   password: String,
   passwordResetToken: String,
   profile: {
     name: String,
-    contributors: []
+    contributors: [{}]
   }
 }, { timestamps: true });
 

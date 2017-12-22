@@ -6,7 +6,7 @@ import Congress from './Congress';
 import Login from '../containers/Login';
 import Signup from '../containers/Signup';
 import Contact from '../containers/Contact';
-import Profile from '../containers/Profile';
+import ProfileContainer from '../containers/ProfileContainer';
 import PasswordReset from '../containers/PasswordReset';
 import NewPassword from '../containers/NewPassword';
 import SearchContributors from '../containers/SearchContributors';
@@ -25,7 +25,7 @@ const Main = () => (
       <Route path="/password-reset" component={PasswordReset}/>
       <AuthenticatedNewPasswordRoute path="/new-password" component={NewPassword} />
       <AuthenticatedContributorSearchRoute path="/search" component={SearchContributors} />
-      <AuthenticatedProfileRoute path="/profile" component={Profile} />
+      <AuthenticatedProfileRoute path="/profile" component={ProfileContainer} />
     </Switch>
   </main>
 );

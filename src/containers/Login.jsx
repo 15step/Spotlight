@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, FormControl, ControlLabel } from 'react-bootstrap';
-import './User-Forms.css';
+import './user-forms.css';
 import * as axios from 'axios';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';

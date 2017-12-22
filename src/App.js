@@ -7,7 +7,7 @@ import Main from './components/Main';
 class App extends React.Component {
   render() {
     return (
-      <div className="App">
+      <div>
         <NavigationBar />
         <Main />
       </div>

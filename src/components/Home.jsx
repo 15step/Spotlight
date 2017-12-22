@@ -1,15 +1,16 @@
 import * as React from 'react';
-// import { Jumbotron } from 'react-bootstrap';
 
 const Home = () => {
     return(
         <div className="container">   
-            <h1>Spotlight</h1>
-            <div className="row">
-                <div className="col-sm-offset-3 col-sm-6">
-                    <p className="lead">Spotlight is your tool for finding the latest details
-                     about campaign finance issues the United States 
-                    </p>
+            <div className="spotlight-header">
+                <h1>Spotlight</h1>
+                <div className="row">
+                    <div className="col-sm-offset-3 col-sm-6">
+                        <p className="lead">Spotlight is your tool for finding the latest details
+                        about campaign finance issues the United States 
+                        </p>
+                    </div>
                 </div>
             </div>
             <div className="row">

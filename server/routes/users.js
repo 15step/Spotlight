@@ -31,7 +31,7 @@ router.get("/profile/:id", (req, res) => {
             let userData = {
                 email: user.email,
                 name: user.profile.name,
-                location: user.profile.location
+                contributors: user.profile.contributors
             };
 
             return res.status(200).json({
