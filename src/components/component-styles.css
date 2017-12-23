@@ -1,14 +1,3 @@
 .spotlight-header {
     text-align: center;
 }
-
-.contrib-search-box {
-    height: 250px;
-    width: 100%;
-    background-color: steelblue;
-    vertical-align: middle;
-}
-
-.contrib-search {
-    height: 200px;
-}
