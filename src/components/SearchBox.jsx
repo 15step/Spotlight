@@ -3,9 +3,11 @@ import './component-styles.css';
 import { Button, FormControl } from 'react-bootstrap';
 
 const SearchBox = (props) => {
+    console.log(props);
     return(
         <div className="row">
-            <div className="col-md-9">
+            <form onSubmit={props.searchContributors}>            
+                <div className="col-md-9">
                     <div>
                         <FormControl
                             id="formControlSearch"
@@ -15,17 +17,18 @@ const SearchBox = (props) => {
                             placeholder="Search For..."
                         />
                     </div>
-            </div>
-            <div className="col-md-3">
-                <Button 
-                    className="btn btn-default"
-                    block={true} 
-                    bsSize="large"
-                    type="submit"
-                >
-                    Search
-                </Button>
-            </div>
+                </div>
+                <div className="col-md-3">
+                    <Button 
+                        className="btn btn-default"
+                        block={true} 
+                        bsSize="large"
+                        type="submit"
+                    >
+                        Search
+                    </Button>
+                </div>
+            </form>
         </div>
     )
 };

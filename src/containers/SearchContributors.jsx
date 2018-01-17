@@ -15,6 +15,7 @@ class SearchContributors extends React.Component {
     }
 
     search(query) {
+        console.log("reached search");
         axios.get('/search', {
             query: query
         }).then((response) => {
@@ -25,11 +26,12 @@ class SearchContributors extends React.Component {
     }
 
     render() {
+        console.log("hello");
         return(
             <div className="container contrib-search-box">
-            <h2 className="search-box-header">Find a Commitee</h2>
-                <SearchBox />
-                <ContributorTable />
+                <h2 className="search-box-header">Find a Commitee</h2>
+                <SearchBox searchContributors={this.search}/>
+                {/* <ContributorTable /> */}
             </div>
         );
     }

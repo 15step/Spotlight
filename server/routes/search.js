@@ -12,8 +12,8 @@ const options = {
 };
 
 // technically only works for committees
-router.get('/search', (req, res) => {
-
+router.get('/', (req, res) => {
+    console.log("hit search");
     let query = req.body.query;
     options.headers.url += `/committees/search.json?query=${query}`;
 
