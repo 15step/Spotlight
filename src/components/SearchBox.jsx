@@ -14,7 +14,7 @@ const SearchBox = (props) => {
                             type="text"
                             label="Contributor Search"
                             bsSize="lg"
-                            placeholder="Search For..."
+                            placeholder="Search"
                         />
                     </div>
                 </div>

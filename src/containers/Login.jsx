@@ -24,7 +24,7 @@ class Login extends React.Component {
 
     handleEmailChange(event) {
         this.setState({
-            email: event.currentTarget.value,
+            email: event.currentTarget.value
         });
     }
 

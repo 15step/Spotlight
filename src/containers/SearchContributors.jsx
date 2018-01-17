@@ -9,17 +9,30 @@ class SearchContributors extends React.Component {
         super(props)
 
         this.state = {
-            contributors: []
+            contributors: [],
+            query: ''
         }
-        this.search = this.search.bind(this);
+        this.handleQueryChange = this.handleQueryChange.bind(this);
+        this.handleSearch = this.handleSearch.bind(this);
     }
 
-    search(query) {
+    handleQueryChange(event) {
+        this.setState({
+            query: event.currentTarget.value
+        });
+    }
+    
+    handleSearch(event) {
+        event.preventDefault();
+        console.log(event);
         console.log("reached search");
         axios.get('/search', {
-            query: query
+            query: this.state.query
         }).then((response) => {
             console.log(response);
+            this.setState({
+                contributors: ["data1", "data2"]
+            })
         }).catch((err) => {
             console.log(err);
         });
@@ -30,7 +43,7 @@ class SearchContributors extends React.Component {
         return(
             <div className="container contrib-search-box">
                 <h2 className="search-box-header">Find a Commitee</h2>
-                <SearchBox searchContributors={this.search}/>
+                <SearchBox searchContributors={this.handleSearch} updateQuery={this.handleQueryChange} contributors={this.contributors}/>
                 {/* <ContributorTable /> */}
             </div>
         );
