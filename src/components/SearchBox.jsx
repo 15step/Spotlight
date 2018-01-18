@@ -15,6 +15,7 @@ const SearchBox = (props) => {
                             label="Contributor Search"
                             bsSize="lg"
                             placeholder="Search"
+                            onChange={props.handleQueryChange}
                         />
                     </div>
                 </div>

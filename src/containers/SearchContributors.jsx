@@ -24,11 +24,8 @@ class SearchContributors extends React.Component {
     
     handleSearch(event) {
         event.preventDefault();
-        console.log(event);
-        console.log("reached search");
-        axios.get('/search', {
-            query: this.state.query
-        }).then((response) => {
+        axios.get(`/search?contributor=${this.state.query}`) 
+        .then((response) => {
             console.log(response);
             this.setState({
                 contributors: ["data1", "data2"]
@@ -39,11 +36,10 @@ class SearchContributors extends React.Component {
     }
 
     render() {
-        console.log("hello");
         return(
             <div className="container contrib-search-box">
-                <h2 className="search-box-header">Find a Commitee</h2>
-                <SearchBox searchContributors={this.handleSearch} updateQuery={this.handleQueryChange} contributors={this.contributors}/>
+                <h2 className="search-box-header">Find a Contributor</h2>
+                <SearchBox searchContributors={this.handleSearch} handleQueryChange={this.handleQueryChange} contributors={this.contributors}/>
                 {/* <ContributorTable /> */}
             </div>
         );
