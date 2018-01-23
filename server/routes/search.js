@@ -21,14 +21,23 @@ function createCommitteeRequest(query) {
 // technically only works for committees
 router.get('/', (req, res) => {
     let query = req.query.committee;
-    let committeeRequest = createCommitteeRequest(query);
+        let committeeRequest = createCommitteeRequest(query);
     try {
-        request.get(committeeRequest, (err, res, body) => {
+        request.get(committeeRequest, (err, committeeResponse, responseBody) => {
             if(err) {
-                console.log('I erred');
-                return err;
+                return res.status(500).json({
+                    success: false,
+                    results: null,
+                    err: "Error processing request"
+                });
             }
-            console.log(body);
+            let commitees = JSON.parse(responseBody).results
+        
+            return res.status(200).json({
+                success: true,
+                results: commitees,
+                err: null
+            });
         });    
     } catch(e) {
         throw e;
