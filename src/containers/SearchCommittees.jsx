@@ -4,7 +4,7 @@ import './search-box.css';
 import ContributorTable from './ContributorTable';
 import axios from 'axios';
 
-class SearchContributors extends React.Component {
+class SearchCommittees extends React.Component {
     constructor(props) {
         super(props)
 
@@ -24,7 +24,8 @@ class SearchContributors extends React.Component {
     
     handleSearch(event) {
         event.preventDefault();
-        axios.get(`/search?contributor=${this.state.query}`) 
+        console.log(this.state.query);
+        axios.get(`/search?committee=${this.state.query}`) 
         .then((response) => {
             console.log(response);
             this.setState({
@@ -38,7 +39,7 @@ class SearchContributors extends React.Component {
     render() {
         return(
             <div className="container contrib-search-box">
-                <h2 className="search-box-header">Find a Contributor</h2>
+                <h2 className="search-box-header">Find a Committee</h2>
                 <SearchBox searchContributors={this.handleSearch} handleQueryChange={this.handleQueryChange} contributors={this.contributors}/>
                 {/* <ContributorTable /> */}
             </div>
@@ -51,4 +52,4 @@ class SearchContributors extends React.Component {
 
 }
 
-export default SearchContributors;
+export default SearchCommittees;

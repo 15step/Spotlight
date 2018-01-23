@@ -9,7 +9,7 @@ import Contact from '../containers/Contact';
 import ProfileContainer from '../containers/ProfileContainer';
 import PasswordReset from '../containers/PasswordReset';
 import NewPassword from '../containers/NewPassword';
-import SearchContributors from '../containers/SearchContributors';
+import SearchCommittees from '../containers/SearchCommittees';
 import { Redirect } from 'react-router'
 
 const Main = () => (
@@ -24,7 +24,7 @@ const Main = () => (
       <Route path="/logout" component={Home}/>
       <Route path="/password-reset" component={PasswordReset}/>
       <AuthenticatedNewPasswordRoute path="/new-password" component={NewPassword} />
-      <AuthenticatedContributorSearchRoute path="/search" component={SearchContributors} />
+      <AuthenticatedContributorSearchRoute path="/search" component={SearchCommittees} />
       <AuthenticatedProfileRoute path="/profile" component={ProfileContainer} />
     </Switch>
   </main>
@@ -64,7 +64,7 @@ const AuthenticatedContributorSearchRoute = ({component: SearchContributors, ...
   return (
     <Route {...rest} render={props => (
       sessionStorage.getItem('jwtToken') ? (
-        <SearchContributors {...props} />
+        <SearchCommittees {...props} />
       ) : (
         <Redirect to={{
           pathname: "/login",
