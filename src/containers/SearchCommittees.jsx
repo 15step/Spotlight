@@ -27,10 +27,11 @@ class SearchCommittees extends React.Component {
         console.log(this.state.query);
         axios.get(`/search?committee=${this.state.query}`) 
         .then((response) => {
-            console.log(response);
-            this.setState({
-                contributors: ["data1", "data2"]
-            })
+            let committees = response.data.results;
+            console.log(committees.length);
+            committees.forEach(committee => {
+                console.log(committee.name);
+            });
         }).catch((err) => {
             console.log(err);
         });

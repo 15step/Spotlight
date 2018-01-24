@@ -13,35 +13,49 @@ function createCommitteeRequest(query) {
             'X-API-KEY': process.env.PROPUBLICA_API_KEY
         }
     };
-    req.url += `/committees/search.json?query=${query}`;
-    
+    req.url += `/committees/search.json?query=${query}&offset=${offset}`;
     return req;
+}
+
+function getCommiteeData(request, offset, pages = 0) {
+    let offset = 20;
+    request.get(request, (err, committeeResponse, responseBody) => {
+        if(err) {
+            return null
+        }
+        let results = JSON.parse(responseBody).results;
+        let pages = Math.ceil(results.num_results % offset);
+
+       for(let i = 0; i < pages; i++) {
+            
+       }
+    
+        return res.status(200).json({
+            success: true,
+            results: committees,
+            err: null
+        });
+    });    
 }
 
 // technically only works for committees
 router.get('/', (req, res) => {
     let query = req.query.committee;
-        let committeeRequest = createCommitteeRequest(query);
-    try {
-        request.get(committeeRequest, (err, committeeResponse, responseBody) => {
-            if(err) {
-                return res.status(500).json({
-                    success: false,
-                    results: null,
-                    err: "Error processing request"
-                });
-            }
-            let commitees = JSON.parse(responseBody).results
-        
-            return res.status(200).json({
-                success: true,
-                results: commitees,
-                err: null
-            });
-        });    
-    } catch(e) {
-        throw e;
+    let committeeRequest = createCommitteeRequest(query);
+    let offset = 20;
+    let foo = getCommiteeData(committeeRequest, offset);
+    if(foo == null) {
+        return res.status(500).json({
+            success: false,
+            results: null,
+            err: "Error processing request"
+        });
     }
+    else {
+
+    }
+
+
 });
 
 module.exports = router;
