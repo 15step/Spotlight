@@ -7,6 +7,7 @@ require('dotenv').config();
 const cycle = "2016" 
 
 function createCommitteeRequest(query) {
+    const offset = 20;
     const req = {
         'url': `https://api.propublica.org/campaign-finance/v1/${cycle}`,
         headers: {
@@ -17,45 +18,41 @@ function createCommitteeRequest(query) {
     return req;
 }
 
-function getCommiteeData(request, offset, pages = 0) {
-    let offset = 20;
-    request.get(request, (err, committeeResponse, responseBody) => {
-        if(err) {
-            return null
-        }
-        let results = JSON.parse(responseBody).results;
-        let pages = Math.ceil(results.num_results % offset);
-
-       for(let i = 0; i < pages; i++) {
-            
-       }
-    
-        return res.status(200).json({
-            success: true,
-            results: committees,
-            err: null
-        });
-    });    
+function getCommiteeData(committeeRequest) {
+    return new Promise((resolve, reject) => {
+        request.get(committeeRequest, (err, committeeResponse, responseBody) => {
+            if(err) {
+                reject(err);
+            } else {
+                let parsedResponse = JSON.parse(responseBody);
+                let propublicaResponse = {
+                    committees: parsedResponse.results,
+                    numCommittees: parsedResponse.num_results
+                };
+                resolve(propublicaResponse);
+            }
+        });    
+    });
 }
 
-// technically only works for committees
+// only works for committees
 router.get('/', (req, res) => {
     let query = req.query.committee;
     let committeeRequest = createCommitteeRequest(query);
     let offset = 20;
-    let foo = getCommiteeData(committeeRequest, offset);
-    if(foo == null) {
+    getCommiteeData(committeeRequest, offset).then((committeeResponse) => {
+        return res.status(200).json({
+            success: true,
+            results: committeeResponse,
+            err: null
+        });
+    }).catch((err) => {
         return res.status(500).json({
             success: false,
             results: null,
-            err: "Error processing request"
+            err: err
         });
-    }
-    else {
-
-    }
-
-
+    });
 });
 
 module.exports = router;

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import SearchBox from '../components/SearchBox';
 import './search-box.css';
-import ContributorTable from './ContributorTable';
+import ContributorTable from '../components/ContributorTable';
 import axios from 'axios';
 
 class SearchCommittees extends React.Component {
@@ -9,8 +9,9 @@ class SearchCommittees extends React.Component {
         super(props)
 
         this.state = {
-            contributors: [],
-            query: ''
+            committees: [],
+            query: '',
+            num_committees: 0
         }
         this.handleQueryChange = this.handleQueryChange.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
@@ -24,14 +25,12 @@ class SearchCommittees extends React.Component {
     
     handleSearch(event) {
         event.preventDefault();
-        console.log(this.state.query);
         axios.get(`/search?committee=${this.state.query}`) 
         .then((response) => {
-            let committees = response.data.results;
-            console.log(committees.length);
-            committees.forEach(committee => {
-                console.log(committee.name);
-            });
+            this.setState({
+                committees: response.data.results.committees,
+                num_commitees: response.data.results.num_results
+            });            
         }).catch((err) => {
             console.log(err);
         });
@@ -39,18 +38,15 @@ class SearchCommittees extends React.Component {
 
     render() {
         return(
-            <div className="container contrib-search-box">
-                <h2 className="search-box-header">Find a Committee</h2>
-                <SearchBox searchContributors={this.handleSearch} handleQueryChange={this.handleQueryChange} contributors={this.contributors}/>
-                {/* <ContributorTable /> */}
+            <div>
+                <div className="container contrib-search-box">
+                    <h2 className="search-box-header">Find a Committee</h2>
+                    <SearchBox searchCommittees={this.handleSearch} handleQueryChange={this.handleQueryChange} committees={this.committees}/>
+                </div>
+                    <ContributorTable />
             </div>
         );
     }
-
-
-
-
-
 }
 
 export default SearchCommittees;
