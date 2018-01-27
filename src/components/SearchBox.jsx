@@ -3,16 +3,15 @@ import './component-styles.css';
 import { Button, FormControl } from 'react-bootstrap';
 
 const SearchBox = (props) => {
-    console.log(props);
     return(
         <div className="row">
-            <form onSubmit={props.searchContributors}>            
+            <form onSubmit={props.searchCommittees}>            
                 <div className="col-md-9">
                     <div>
                         <FormControl
                             id="formControlSearch"
                             type="text"
-                            label="Contributor Search"
+                            label="Commitee Search"
                             bsSize="lg"
                             placeholder="Search"
                             onChange={props.handleQueryChange}

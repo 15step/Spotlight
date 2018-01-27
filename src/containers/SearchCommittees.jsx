@@ -11,7 +11,7 @@ class SearchCommittees extends React.Component {
         this.state = {
             committees: [],
             query: '',
-            num_committees: 0
+            numCommittees: 0
         }
         this.handleQueryChange = this.handleQueryChange.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
@@ -27,23 +27,38 @@ class SearchCommittees extends React.Component {
         event.preventDefault();
         axios.get(`/search?committee=${this.state.query}`) 
         .then((response) => {
-            this.setState({
-                committees: response.data.results.committees,
-                num_commitees: response.data.results.num_results
-            });            
+            if(response.status !== 200) {
+                alert("Sorry we were not able to complete that search.")
+            }
+            else if(response.data.results.numCommittees === 0) {
+                alert("Sorry we could not find any results! ");
+                this.setState({
+                    committees: [],
+                    numCommittees: 0
+                });
+            }
+            else {
+                this.setState({
+                    committees: response.data.results.committees,
+                    numCommittees: response.data.results.numCommittees
+                });    
+            }
         }).catch((err) => {
             console.log(err);
         });
     }
 
     render() {
+        const { numCommittees } = this.state;
         return(
             <div>
                 <div className="container contrib-search-box">
                     <h2 className="search-box-header">Find a Committee</h2>
                     <SearchBox searchCommittees={this.handleSearch} handleQueryChange={this.handleQueryChange} committees={this.committees}/>
                 </div>
-                    <ContributorTable />
+                {numCommittees !== 0 &&
+                    <ContributorTable committees={this.state.committees} />
+                }
             </div>
         );
     }
