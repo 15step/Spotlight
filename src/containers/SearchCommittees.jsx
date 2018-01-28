@@ -2,6 +2,7 @@ import * as React from 'react';
 import SearchBox from '../components/SearchBox';
 import './search-box.css';
 import ContributorTable from '../components/ContributorTable';
+import ForwardBackButton from '../components/ForwardBackButton';
 import axios from 'axios';
 
 class SearchCommittees extends React.Component {
@@ -11,7 +12,9 @@ class SearchCommittees extends React.Component {
         this.state = {
             committees: [],
             query: '',
-            numCommittees: 0
+            numCommittees: 0,
+            maxPages: 1,
+            page: 1
         }
         this.handleQueryChange = this.handleQueryChange.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
@@ -25,7 +28,7 @@ class SearchCommittees extends React.Component {
     
     handleSearch(event) {
         event.preventDefault();
-        axios.get(`/search?committee=${this.state.query}`) 
+        axios.get(`/search?committee=${this.state.query}&page=${this.state.page}`)
         .then((response) => {
             if(response.status !== 200) {
                 alert("Sorry we were not able to complete that search.")
@@ -34,7 +37,9 @@ class SearchCommittees extends React.Component {
                 alert("Sorry we could not find any results! ");
                 this.setState({
                     committees: [],
-                    numCommittees: 0
+                    numCommittees: 0,
+                    maxPages: 1,
+                    pages: 1
                 });
             }
             else {
@@ -50,6 +55,7 @@ class SearchCommittees extends React.Component {
 
     render() {
         const { numCommittees } = this.state;
+        const { pages } = this.state;
         return(
             <div>
                 <div className="container contrib-search-box">
@@ -57,7 +63,10 @@ class SearchCommittees extends React.Component {
                     <SearchBox searchCommittees={this.handleSearch} handleQueryChange={this.handleQueryChange} committees={this.committees}/>
                 </div>
                 {numCommittees !== 0 &&
-                    <ContributorTable committees={this.state.committees} />
+                    <div>
+                        <ContributorTable committees={this.state.committees}  />
+                        <ForwardBackButton searchCommittees={this.handleSearch} page={this.state.pages}/>
+                    </div>
                 }
             </div>
         );

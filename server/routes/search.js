@@ -5,21 +5,24 @@ require('dotenv').config();
 
 //cycle is a mandatory value, that varies by election cycle
 const cycle = "2016" 
+//offset for pagination
+const offset = 20;
 
-function createCommitteeRequest(query) {
-    const offset = 20;
+function createCommitteeRequest(query, page=1) {
+    let pageOffset = page*offset;
     const req = {
         'url': `https://api.propublica.org/campaign-finance/v1/${cycle}`,
         headers: {
             'X-API-KEY': process.env.PROPUBLICA_API_KEY
         }
     };
-    req.url += `/committees/search.json?query=${query}&offset=${offset}`;
+    req.url += `/committees/search.json?query=${query}&offset=${pageOffset}`;
     return req;
 }
 
 function getCommiteeData(committeeRequest) {
     return new Promise((resolve, reject) => {
+        console.log(committeeRequest.url);
         request.get(committeeRequest, (err, committeeResponse, responseBody) => {
             if(err) {
                 reject(err);
@@ -27,7 +30,8 @@ function getCommiteeData(committeeRequest) {
                 let parsedResponse = JSON.parse(responseBody);
                 let propublicaResponse = {
                     committees: parsedResponse.results,
-                    numCommittees: parsedResponse.num_results
+                    numCommittees: parsedResponse.num_results,
+                    pages: Math.floor(parsedResponse.num_results / offset)
                 };
                 resolve(propublicaResponse);
             }
@@ -38,9 +42,10 @@ function getCommiteeData(committeeRequest) {
 // only works for committees
 router.get('/', (req, res) => {
     let query = req.query.committee;
-    let committeeRequest = createCommitteeRequest(query);
-    let offset = 20;
-    getCommiteeData(committeeRequest, offset).then((committeeResponse) => {
+    let page = req.query.page;
+
+    let committeeRequest = createCommitteeRequest(query, page);
+    getCommiteeData(committeeRequest).then((committeeResponse) => {
         return res.status(200).json({
             success: true,
             results: committeeResponse,

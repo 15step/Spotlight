@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 const ContributorTable = (props) => {
-    console.log(props);
     return(
         <div className="container">
             <table className="table table-striped">
