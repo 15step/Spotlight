@@ -8,7 +8,7 @@ const cycle = "2016"
 //offset for pagination
 const offset = 20;
 
-function createCommitteeRequest(query, page=1) {
+function createCommitteeRequest(query, page) {
     let pageOffset = page*offset;
     const req = {
         'url': `https://api.propublica.org/campaign-finance/v1/${cycle}`,
@@ -37,13 +37,13 @@ function getCommiteeData(committeeRequest) {
             }
         });    
     });
-}
+}   
 
 // only works for committees
 router.get('/', (req, res) => {
     let query = req.query.committee;
     let page = req.query.page;
-
+    console.log(page);
     let committeeRequest = createCommitteeRequest(query, page);
     getCommiteeData(committeeRequest).then((committeeResponse) => {
         return res.status(200).json({
