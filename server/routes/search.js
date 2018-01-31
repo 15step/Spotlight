@@ -37,7 +37,7 @@ function getCommiteeData(committeeRequest) {
             }
         });    
     });
-}   
+}
 
 // only works for committees
 router.get('/', (req, res) => {

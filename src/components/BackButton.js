@@ -2,10 +2,9 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 
 const BackButton = (props) => {
-
     return (
         <Button 
-        className="btn btn-default"
+        className="btn btn-primary"
         block={true} 
         bsSize="small"
         type="submit"

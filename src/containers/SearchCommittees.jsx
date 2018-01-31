@@ -89,9 +89,11 @@ class SearchCommittees extends React.Component {
                 {numCommittees !== 0 &&
                     <div>
                         <ContributorTable committees={this.state.committees}  />
-                        <BackButton prevCommittees={this.handleBackSearch} page={this.state.pages}/>
-                        <ForwardButton nextCommittees={this.handleForwardSearch} page={this.state.pages} />
-                        <p>{this.state.page} / {this.state.maxPages}</p>
+                        <div className="container button-container">
+                            <BackButton prevCommittees={this.handleBackSearch} page={this.state.pages}/>
+                            <ForwardButton nextCommittees={this.handleForwardSearch} page={this.state.pages} />
+                            <p>{this.state.page} / {this.state.maxPages}</p>
+                        </div>
                     </div>
                 }
             </div>

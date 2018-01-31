@@ -12,3 +12,16 @@
 .search-box-header {
     color: white;
 }
+
+.button-container {
+    text-align: center;
+}
+
+.button-container {
+    vertical-align: top;
+}
+.button-container button {
+    display: inline-block;
+    width: 25%;
+    margin: 10px 7px;
+}

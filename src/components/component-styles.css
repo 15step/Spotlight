@@ -1,3 +1,7 @@
 .spotlight-header {
     text-align: center;
 }
+
+th {
+    white-space: nowrap;
+}

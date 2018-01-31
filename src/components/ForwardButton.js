@@ -4,14 +4,15 @@ import { Button } from 'react-bootstrap';
 const ForwardButton = (props) => {
     return (
         <Button 
-        className="btn btn-default"
+        className="btn btn-primary"
         block={true} 
         bsSize="small"
         type="submit"
         onClick={props.nextCommittees}
     >
         Forward
-    </Button>    )
+    </Button>    
+    )
     
 };
 
