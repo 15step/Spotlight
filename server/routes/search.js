@@ -22,7 +22,6 @@ function createCommitteeRequest(query, page) {
 
 function getCommiteeData(committeeRequest) {
     return new Promise((resolve, reject) => {
-        console.log(committeeRequest.url);
         request.get(committeeRequest, (err, committeeResponse, responseBody) => {
             if(err) {
                 reject(err);
@@ -30,7 +29,7 @@ function getCommiteeData(committeeRequest) {
                 let parsedResponse = JSON.parse(responseBody);
                 let propublicaResponse = {
                     committees: parsedResponse.results,
-                    numCommittees: parsedResponse.num_results,
+                    numCommittees: parsedResponse.results.length,
                     pages: Math.floor(parsedResponse.num_results / offset)
                 };
                 resolve(propublicaResponse);
@@ -43,7 +42,6 @@ function getCommiteeData(committeeRequest) {
 router.get('/', (req, res) => {
     let query = req.query.committee;
     let page = req.query.page;
-    console.log(page);
     let committeeRequest = createCommitteeRequest(query, page);
     getCommiteeData(committeeRequest).then((committeeResponse) => {
         return res.status(200).json({

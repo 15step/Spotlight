@@ -25,10 +25,8 @@ class SearchCommittees extends React.Component {
     }
 
     loadData(page=1) {
-        console.log("I was called");
         axios.get(`/search?committee=${this.state.query}&page=${page}`)
         .then((response) => {
-            console.log(response);
             if(response.status !== 200) {
                 alert("Sorry we were not able to complete that search.")
             }
@@ -38,7 +36,7 @@ class SearchCommittees extends React.Component {
                     committees: [],
                     numCommittees: 0,
                     maxPages: 1,
-                    page: 1
+                    page: 0
                 });
             }
             else {
@@ -79,7 +77,6 @@ class SearchCommittees extends React.Component {
 
     render() {
         const { numCommittees } = this.state;
-        console.log(this.state);
         return(
             <div>
                 <div className="container contrib-search-box">
