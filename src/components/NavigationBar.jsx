@@ -5,7 +5,6 @@ import logout from '../actions/userActions/logout';
 
 
 const NavigationBar = () => {
-    let jwtToken = sessionStorage.getItem('jwtToken');
         return (
             <Navbar inverse={true}>
                 <Navbar.Header>
@@ -35,6 +34,11 @@ const NavigationBar = () => {
                     {sessionStorage.getItem('jwtToken') &&
                         <LinkContainer to="/search">
                             <NavItem eventKey={5} href="#">Search</NavItem>
+                        </LinkContainer>
+                    }
+                    {sessionStorage.getItem('jwtToken') &&
+                        <LinkContainer to="/profile">
+                        <NavItem eventKey={6} href="#">Profile</NavItem>
                         </LinkContainer>
                     }
                     {sessionStorage.getItem('jwtToken') &&

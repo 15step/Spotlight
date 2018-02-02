@@ -2,26 +2,40 @@ import * as React from 'react';
 import SearchBox from '../components/SearchBox';
 import './search-box.css';
 import ContributorTable from '../components/ContributorTable';
-import BackButton from '../components/BackButton';
-import ForwardButton from '../components/ForwardButton';
+import BackButton from '../components/BackButton.jsx';
+import ForwardButton from '../components/ForwardButton.jsx';
 import axios from 'axios';
+import { getUserId, getUserData } from '../utils/userUtils';
 
 class SearchCommittees extends React.Component {
     constructor(props) {
         super(props)
-
         this.state = {
             committees: [],
             query: '',
             numCommittees: 0,
             maxPages: 1,
-            page: 1
+            page: 1,
+            userData: null
         }
         this.handleQueryChange = this.handleQueryChange.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleBackSearch = this.handleBackSearch.bind(this);
         this.handleForwardSearch = this.handleForwardSearch.bind(this);
         this.loadData = this.loadData.bind(this);
+    }
+
+    componentDidMount() {
+        let userId = getUserId();
+        if(userId) {
+            getUserData(userId).then((user) => {
+                if(user) {
+                    this.setState({
+                        userData: user
+                    });
+                }
+            });
+        }
     }
 
     loadData(page=1) {
@@ -85,9 +99,10 @@ class SearchCommittees extends React.Component {
                 </div>
                 {numCommittees !== 0 &&
                     <div>
-                        <ContributorTable committees={this.state.committees}  />
+                        <ContributorTable committees={this.state.committees} 
+                            userCommittees = {this.state.userData.committees} />
                         <div className="container button-container">
-                            <BackButton prevCommittees={this.handleBackSearch} page={this.state.pages}/>
+                            <BackButton prevCommittees={this.handleBackSearch} page={this.state.pages} />
                             <ForwardButton nextCommittees={this.handleForwardSearch} page={this.state.pages} />
                             <p>{this.state.page} / {this.state.maxPages}</p>
                         </div>

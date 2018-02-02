@@ -1,6 +1,8 @@
 import * as React from 'react';
 
 const ContributorTable = (props) => {
+    const { userCommittees } = props;
+    console.log(userCommittees);
     return(
         <div className="container">
             <table className="table table-striped">
@@ -12,6 +14,7 @@ const ContributorTable = (props) => {
                         <th>State</th>
                         <th>Zip</th>
                         <th>FEC Filing</th>
+                        <th>Subscribe</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import axios from 'axios';
-import jwt from 'jsonwebtoken';
 import Profile from '../components/Profile';
+import { getUserId, getUserData } from '../utils/userUtils';
 
 class ProfileContainer extends React.Component {
     constructor(props) {
@@ -11,20 +11,15 @@ class ProfileContainer extends React.Component {
             user: null
         }
     }
-    componentWillMount() {
-        let token = sessionStorage.getItem('jwtToken');
-        let userId = jwt.decode(token)._id;
-        console.log(userId);
+    componentDidMount() {
+        let userId = getUserId();
         if(userId) {
-            axios.get(`/profile/${userId}`)
-            .then((response) => {
-                let user = response.data.userData;
-                this.setState({
-                    user 
-                });
-            })
-            .catch((error) => {
-                console.log("Error getting user data");
+            getUserData(userId).then((user) => {
+                if(user) {
+                    this.setState({
+                        user: user 
+                    });            
+                }
             }); 
         } 
     }
